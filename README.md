@@ -10,14 +10,14 @@ TODO: add game link
 ## Cloning the Repository
 1.  First, navigate to the directory that you would like to clone the repository into using commands like:
     -   `cd`: to change your working directory.
-    -   `cd ../`  to "go back" a level in your directory tree.
+    -   `cd ..`  to "go back" a level in your directory tree.
 2.  Next, clone the remote repository and create a local copy on your machine using this command:
 
 -   `git clone https://github.com/maxsg5/CS-Hackathon.git`
 
 3.  Now you can see the contents of the remote repository on your machine by moving into the newly cloned directory:
 
--   `cd CS-Hackathon/`
+-   `cd CS-Hackathon`
 -   `ls -la`
 
 ## Opening the project in Unity
