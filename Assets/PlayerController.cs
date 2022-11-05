@@ -58,7 +58,16 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //get player input
-        float horizontal = Input.GetAxis("Horizontal");
+        float horizontal = 0f;
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            horizontal = -1f;
+        }
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            horizontal = 1f;
+        }
+        
         //check if the player is jumping
         isJumping = Input.GetButtonDown("Jump");
         //check grounded by raycast
