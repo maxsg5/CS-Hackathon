@@ -14,6 +14,6 @@ public class SmoothFollow : MonoBehaviour
         //follow the target's x and y position smoothly
         Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
         Vector3 cameraPosition = new Vector3(transform.position.x + horizontalOffset, transform.position.y + verticalOffset, transform.position.z);
-        transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed);
+        transform.position = Vector3.Lerp(cameraPosition, targetPosition, smoothSpeed);
     }
 }
