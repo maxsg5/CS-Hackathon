@@ -82,12 +82,12 @@ public class PlayerController : MonoBehaviour
         if (isCrouching)
         {
             //set y scale to 0.5
-            transform.localScale = new Vector2(transform.localScale.x, 0.5f);
+            transform.localScale = new Vector2(transform.localScale.x, 0.43f/2f);
         }
         else
         {
             //set y scale to 1
-            transform.localScale = new Vector2(transform.localScale.x, 1f);
+            transform.localScale = new Vector2(transform.localScale.x, 0.43f);
         }
         
         //set move direction
