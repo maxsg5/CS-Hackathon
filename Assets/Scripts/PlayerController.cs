@@ -24,13 +24,14 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
     private float boxColliderHeight;
     private float spriteHeight;
+    public Healthbar healthbar;
 
     //[serializefield] makes it visible in the inspector but the variable is still private
     [SerializeField] private float moveSpeed = 5f; 
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private bool isCrouching = false;
-    [SerializeField] private float health = 100f;
+    [SerializeField] private float health;
     [SerializeField] private float maxHealth = 100f;
     #endregion
 
@@ -52,6 +53,9 @@ public class PlayerController : MonoBehaviour
         //initialize variables
         boxColliderHeight = boxCollider.size.y;
         spriteHeight = spriteRenderer.bounds.size.y;
+        health = maxHealth;
+        healthbar.MaxHealth(maxHealth);
+
     }
 
     // Update is called once per frame
@@ -105,7 +109,21 @@ public class PlayerController : MonoBehaviour
         {
             spriteRenderer.flipX = true;  
         }
-        
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            RemoveHealth(5.0f);
+        }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            AddHealth(5.0f);
+        }
+
+        // Destroy charcter function
+        if (health == 0)
+        {
+            Debug.Log("Player dead");
+            // Add code to destory player when health is equal to 0
+        }
     }
 
     //FixedUpdate is called once per physics update
@@ -133,19 +151,36 @@ public class PlayerController : MonoBehaviour
     #region custom methods
     //custom methods are methods that you create yourself go here
 
+    // Gets current health of player
     void GetHealth()
     {
-        //get the health of the player
+        // Player health
     }
-
+    // Removes health from player
     void RemoveHealth(float amount)
     {
-        //remove health from the player
+        if (health == 0)
+        {
+            return;
+        }
+        else
+        {
+            health -= amount;
+            healthbar.CurrentHealth(health);
+        }
     }
-
+    // Adds health to player
     void AddHealth(float amount)
     {
-        //add health to the player
+        if (health == maxHealth)
+        {
+            Debug.Log("Player is at max health");
+        }
+        else
+        {
+            health += amount;
+            healthbar.CurrentHealth(health);
+        }
     }
     #endregion
 
