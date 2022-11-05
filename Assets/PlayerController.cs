@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private AudioSource audioSource;
     private BoxCollider2D boxCollider;
-    private Vector3 moveDirection = Vector3.zero;
+    private Vector2 moveDirection = Vector2.zero;
     private bool isJumping = false;
     private float boxColliderHeight;
     private float spriteHeight;
@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //get player input
-        float horizontal = Input.GetAxis("Horizontal");
+        float horizontal = Input.GetAxisRaw("Horizontal");
         //check if the player is jumping
         isJumping = Input.GetButtonDown("Jump");
         //check if the player is crouching
@@ -68,16 +68,16 @@ public class PlayerController : MonoBehaviour
         if (isCrouching)
         {
             //set y scale to 0.5
-            transform.localScale = new Vector3(transform.localScale.x, 0.5f, transform.localScale.z);
+            transform.localScale = new Vector2(transform.localScale.x, 0.5f);
         }
         else
         {
             //set y scale to 1
-            transform.localScale = new Vector3(transform.localScale.x, 1f, transform.localScale.z);
+            transform.localScale = new Vector2(transform.localScale.x, 1f);
         }
         
         //set move direction
-        moveDirection = new Vector3(horizontal, 0, 0).normalized;
+        moveDirection = new Vector2(horizontal, 0).normalized;
 
         //change the animation state based on the player's movement
         animator.SetFloat("Speed", Mathf.Abs(horizontal));
@@ -160,11 +160,11 @@ public class PlayerController : MonoBehaviour
         {
             //draw a raycast to show where the player is grounded
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(boxCollider.bounds.center, new Vector3(boxCollider.bounds.center.x, boxCollider.bounds.center.y - boxCollider.bounds.extents.y - 0.1f, boxCollider.bounds.center.z));
+            Gizmos.DrawLine(boxCollider.bounds.center, new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.center.y - boxCollider.bounds.extents.y - 0.1f));
 
             //draw the collider size
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(boxCollider.bounds.center, new Vector3(boxCollider.size.x, boxCollider.size.y, 1));
+            Gizmos.DrawWireCube(boxCollider.bounds.center, new Vector2(boxCollider.size.x, boxCollider.size.y));
         }
     }
     
