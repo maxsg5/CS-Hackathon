@@ -15,16 +15,21 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region private variables
+    private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
     private Animator animator;
     private AudioSource audioSource;
     private BoxCollider2D boxCollider;
     private Vector3 moveDirection = Vector3.zero;
+    private bool isJumping = false;
+    private float boxColliderHeight;
+    private float spriteHeight;
 
     //[serializefield] makes it visible in the inspector but the variable is still private
     [SerializeField] private float moveSpeed = 5f; 
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private bool isGrounded = false;
+    [SerializeField] private bool isCrouching = false;
     [SerializeField] private float health = 100f;
     [SerializeField] private float maxHealth = 100f;
     #endregion
@@ -34,6 +39,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         //initialize the variables for the components attached to the object
+        spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
@@ -44,6 +50,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //initialize variables
+        boxColliderHeight = boxCollider.size.y;
+        spriteHeight = spriteRenderer.bounds.size.y;
     }
 
     // Update is called once per frame
@@ -52,19 +60,36 @@ public class PlayerController : MonoBehaviour
         //get player input
         float horizontal = Input.GetAxis("Horizontal");
         //check if the player is jumping
-        bool isJumping = Input.GetButtonDown("Jump");
+        isJumping = Input.GetButtonDown("Jump");
+        //check if the player is crouching
+        isCrouching = Input.GetButton("Crouch");
+
+        //check if the player is crouching
+        if (isCrouching)
+        {
+            //set y scale to 0.5
+            transform.localScale = new Vector3(transform.localScale.x, 0.5f, transform.localScale.z);
+        }
+        else
+        {
+            //set y scale to 1
+            transform.localScale = new Vector3(transform.localScale.x, 1f, transform.localScale.z);
+        }
         
         //set move direction
         moveDirection = new Vector3(horizontal, 0, 0).normalized;
 
+        //change the animation state based on the player's movement
+        animator.SetFloat("Speed", Mathf.Abs(horizontal));
+
         //flip the player if they are moving in the opposite direction
-        if (moveDirection.x > 0)
+        if (horizontal > 0)
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            spriteRenderer.flipX = false;
         }
-        else if (moveDirection.x < 0)
+        if (horizontal < 0)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            spriteRenderer.flipX = true;  
         }
         
     }
@@ -74,14 +99,32 @@ public class PlayerController : MonoBehaviour
     {
         //check grounded by raycast
         isGrounded = Physics2D.Raycast(boxCollider.bounds.center, Vector2.down, boxCollider.bounds.extents.y + 0.1f, LayerMask.GetMask("Ground"));
+
         //if the player can jump and is jumping
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        if (isGrounded && isJumping)
         {
-            //add force to the rigidbody
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            //make the player jump
+            rb.velocity = Vector2.up * jumpForce;
+            animator.SetBool("Jump", true);
         }
-        //set the x component of the rigidbody's velocity to the move direction multiplied by the move speed
-        rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+        else
+        {
+            animator.SetBool("Jump", false);
+        }
+
+        //if the player is crouching
+        if (isCrouching)
+        {
+            //set the x component of the rigidbody's velocity to the move direction multiplied by the move speed
+            rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+        }
+        else
+        {
+            //set the x component of the rigidbody's velocity to the move direction multiplied by the move speed
+            rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+        }
+
+        
     }
     
     #endregion
@@ -103,8 +146,28 @@ public class PlayerController : MonoBehaviour
     {
         //add health to the player
     }
+    #endregion
+
+    #if UNITY_EDITOR
+    #region debug methods
+    //debug methods are methods that are only used for debugging and should be removed before the game is released
 
     
+    //OnDrawGizmos is called every frame in the editor
+    void OnDrawGizmos()
+    {
+        if (Application.isPlaying)
+        {
+            //draw a raycast to show where the player is grounded
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(boxCollider.bounds.center, new Vector3(boxCollider.bounds.center.x, boxCollider.bounds.center.y - boxCollider.bounds.extents.y - 0.1f, boxCollider.bounds.center.z));
+
+            //draw the collider size
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(boxCollider.bounds.center, new Vector3(boxCollider.size.x, boxCollider.size.y, 1));
+        }
+    }
     
     #endregion
+    #endif
 }
