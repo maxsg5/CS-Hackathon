@@ -61,6 +61,20 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         //check if the player is jumping
         isJumping = Input.GetButtonDown("Jump");
+        //check grounded by raycast
+        isGrounded = Physics2D.Raycast(boxCollider.bounds.center, Vector2.down, boxCollider.bounds.extents.y + 0.1f, LayerMask.GetMask("Ground"));
+
+        //if the player can jump and is jumping
+        if (isGrounded && isJumping)
+        {
+            //make the player jump
+            rb.velocity = Vector2.up * jumpForce;
+            animator.SetBool("Jump", true);
+        }
+        else
+        {
+            animator.SetBool("Jump", false);
+        }
         //check if the player is crouching
         isCrouching = Input.GetButton("Crouch");
 
@@ -97,20 +111,7 @@ public class PlayerController : MonoBehaviour
     //FixedUpdate is called once per physics update
     void FixedUpdate()
     {
-        //check grounded by raycast
-        isGrounded = Physics2D.Raycast(boxCollider.bounds.center, Vector2.down, boxCollider.bounds.extents.y + 0.1f, LayerMask.GetMask("Ground"));
-
-        //if the player can jump and is jumping
-        if (isGrounded && isJumping)
-        {
-            //make the player jump
-            rb.velocity = Vector2.up * jumpForce;
-            animator.SetBool("Jump", true);
-        }
-        else
-        {
-            animator.SetBool("Jump", false);
-        }
+       
 
         //if the player is crouching
         if (isCrouching)
