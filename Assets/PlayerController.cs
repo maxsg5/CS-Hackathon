@@ -8,6 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlayerController : MonoBehaviour
 {
+    
     #region public variables
     //public variables are visible in the inspector by default
     //try to minimize the number of public variables and use private variables with public getters and setters instead when possible
@@ -18,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private AudioSource audioSource;
     private BoxCollider2D boxCollider;
+    private Vector3 moveDirection = Vector3.zero;
+
     //[serializefield] makes it visible in the inspector but the variable is still private
     [SerializeField] private float moveSpeed = 5f; 
     [SerializeField] private float jumpForce = 5f;
@@ -46,59 +49,45 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //get input
+        //get player input
         float horizontal = Input.GetAxis("Horizontal");
-        bool jump = Input.GetButtonDown("Jump");
-        //move the player based on input
-        Move(horizontal);
-        //check if the player is grounded
-        CheckGrounded();
-        //jump if the player is grounded and the jump button is pressed
-        if (jump && isGrounded)
-        {
-            Jump();
-        }
+        //check if the player is jumping
+        bool isJumping = Input.GetButtonDown("Jump");
+        
+        //set move direction
+        moveDirection = new Vector3(horizontal, 0, 0).normalized;
 
+        //flip the player if they are moving in the opposite direction
+        if (moveDirection.x > 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (moveDirection.x < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        
+    }
+
+    //FixedUpdate is called once per physics update
+    void FixedUpdate()
+    {
+        //check grounded by raycast
+        isGrounded = Physics2D.Raycast(boxCollider.bounds.center, Vector2.down, boxCollider.bounds.extents.y + 0.1f, LayerMask.GetMask("Ground"));
+        //if the player can jump and is jumping
+        if (isGrounded && Input.GetButtonDown("Jump"))
+        {
+            //add force to the rigidbody
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
+        //set the x component of the rigidbody's velocity to the move direction multiplied by the move speed
+        rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
     }
     
     #endregion
 
     #region custom methods
     //custom methods are methods that you create yourself go here
-    void Move(float horizontal)
-    {
-        //move the player with delta time so that the movement is framerate independent
-        rb.velocity = new Vector2(horizontal * moveSpeed * Time.deltaTime, rb.velocity.y);
-        print(rb.velocity);
-        //flip the player if they are moving left
-        if (horizontal < 0)
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
-        //flip the player if they are moving right
-        else if (horizontal > 0)
-        {
-            transform.localScale = new Vector3(1, 1, 1);
-        }
-        //set the animator parameters
-        // animator.SetFloat("Speed", Mathf.Abs(horizontal));
-    }
-
-    void Jump()
-    {
-        //add force to the player
-        rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-        //set the animator parameters
-        // animator.SetTrigger("Jump");
-    }
-    
-    void CheckGrounded()
-    {
-        //check if the player is grounded
-        isGrounded = Physics2D.OverlapBox(new Vector2(transform.position.x, transform.position.y - boxCollider.bounds.extents.y), new Vector2(boxCollider.bounds.size.x - 0.1f, 0.1f), 0, LayerMask.GetMask("Ground"));
-        //set the animator parameters
-        // animator.SetBool("Grounded", isGrounded);
-    }
 
     void GetHealth()
     {
@@ -114,6 +103,8 @@ public class PlayerController : MonoBehaviour
     {
         //add health to the player
     }
+
+    
     
     #endregion
 }
