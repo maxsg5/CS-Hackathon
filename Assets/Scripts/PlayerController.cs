@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     //public variables are visible in the inspector by default
     //try to minimize the number of public variables and use private variables with public getters and setters instead when possible
     public Healthbar healthbar;
+    public bool isHoldingBox = false;
     
     #endregion
 

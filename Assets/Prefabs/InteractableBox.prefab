@@ -228,12 +228,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 4.4910975}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1403490680976942824}
-  m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
   _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 1403490680976942824}
+  m_maskType: 0
 --- !u!1 &1403490681887792233
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,6 +247,7 @@ GameObject:
   - component: {fileID: 1403490681887792276}
   - component: {fileID: 1403490681887792235}
   - component: {fileID: 1403490681887792234}
+  - component: {fileID: 607357427149695651}
   m_Layer: 0
   m_Name: InteractableBox
   m_TagString: Untagged
@@ -296,7 +297,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 554ae14c85c8fd84897a264cc6cff460, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -389,3 +390,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circleSensor: {fileID: 1403490680630891260}
   Message: {fileID: 1403490680976942830}
+--- !u!114 &607357427149695651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403490681887792233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a2a0d51d108554d9b1867108b1b8f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveAmount: 0
+  dissolveSpeed: 0
+  isDissolving: 0
+  outColor: {r: 0, g: 0, b: 0, a: 0}
+  inColor: {r: 0, g: 0, b: 0, a: 0}

@@ -8,22 +8,18 @@ public class PickUpController : MonoBehaviour
     public Rigidbody2D rb;
     public BoxCollider2D boxCollider;
     public Transform player, objHolder;
-
     public float pickUpRange = 2f;
-
     public bool isHolding;
-
+    
+    private Transform spawnPoint;
+    private DissolveController dissolveController;
+    
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        spawnPoint = transform;
+        dissolveController = GetComponent<DissolveController>();
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         Vector3 distanceToPlayer = player.position - transform.position;
@@ -43,20 +39,51 @@ public class PickUpController : MonoBehaviour
                 //turn off the message
                 interactableBox.Message.SetActive(false);
                 interactableBox.enabled = false;
+                player.GetComponent<PlayerController>().isHoldingBox = true;
 
             }
         }
         else if(isHolding)
         {
-            if(Input.GetKeyDown(KeyCode.E))
-            {
-                isHolding = false;
-                rb.isKinematic = false;
-                boxCollider.isTrigger = false;
-                transform.SetParent(null);
-                interactableBox.enabled = true;
-                interactableBox.Message.SetActive(true);
-            }
+            return;
         }
+    }
+    
+    public void DropItem()
+    {
+        isHolding = false;
+        rb.isKinematic = false;
+        boxCollider.isTrigger = false;
+        transform.SetParent(null);
+        player.GetComponent<PlayerController>().isHoldingBox = false;
+    }
+
+    public void DestroyBox()
+    {
+        //dissolve the box
+        dissolveController.isDissolving = true;
+        StartCoroutine(ResetBoxCo());
+
+    }
+
+    private void ResetBox()
+    {
+        //reset the box
+        transform.position = spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
+        transform.SetParent(null);
+        rb.isKinematic = false;
+        boxCollider.isTrigger = false;
+        isHolding = false;
+        player.GetComponent<PlayerController>().isHoldingBox = false;
+        //reset the interactable box
+        interactableBox.enabled = true;
+    }
+    
+    IEnumerator ResetBoxCo()
+    {
+        yield return new WaitForSeconds(2f);
+        ResetBox();
+        dissolveController.isDissolving = false;
     }
 }
