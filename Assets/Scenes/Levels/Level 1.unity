@@ -1839,7 +1839,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &693194390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3943,6 +3943,8 @@ MonoBehaviour:
   player: {fileID: 858370403}
   objHolder: {fileID: 2080515519}
   pickUpRange: 2
+  throwForce: 5
+  throwSideForce: 2.5
   isHolding: 0
 --- !u!4 &2080515519 stripped
 Transform:

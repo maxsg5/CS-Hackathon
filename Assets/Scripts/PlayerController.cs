@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     //try to minimize the number of public variables and use private variables with public getters and setters instead when possible
     public Healthbar healthbar;
     public bool isHoldingBox = false;
-    
+    public bool isFacingRight = true;
     #endregion
 
     #region private variables
@@ -111,10 +111,12 @@ public class PlayerController : MonoBehaviour
         if (horizontal > 0)
         {
             spriteRenderer.flipX = false;
+            isFacingRight = true;
         }
         if (horizontal < 0)
         {
             spriteRenderer.flipX = true;  
+            isFacingRight = false;
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
