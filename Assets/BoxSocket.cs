@@ -44,7 +44,8 @@ public class BoxSocket : MonoBehaviour
                 //turn off the box's rigidbody2d 
                 interactableBox.GetComponent<Rigidbody2D>().isKinematic = true;
                 interactableBox.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                interactableBox.GetComponent<Rigidbody2D>().rotation = 0f;
+                //turn off rotation
+                interactableBox.GetComponent<Rigidbody2D>().freezeRotation = true;
                 //turn off the box's collider2d
                 interactableBox.GetComponent<Collider2D>().enabled = false;
                 playerController.isHoldingBox = false;
