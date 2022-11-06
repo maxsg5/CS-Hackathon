@@ -5,7 +5,6 @@ using UnityEngine.Events;
 
 public class BoxSocket : MonoBehaviour
 {
-    public BoxSocketSensor boxSocketSensor;
     public GameObject Message;
     public GameObject interactableBox;
     public UnityEvent OnBoxPlaced;
@@ -13,11 +12,13 @@ public class BoxSocket : MonoBehaviour
     private InteractableBox interactableBoxScript;
     private PlayerController playerController;
     private bool placed = false;
+    private ParticleSystem particleSystem;
    
     void Awake()
     {
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         interactableBoxScript = interactableBox.GetComponent<InteractableBox>();
+        particleSystem = GetComponent<ParticleSystem>();
     }
 
    
@@ -26,36 +27,32 @@ public class BoxSocket : MonoBehaviour
         if(placed)
             return;
         
-        //if the player is holding a box and is near the socket, display the message
-        if (boxSocketSensor.isTriggered)
+        //if the distance between the socket and the box is less than 1 we are in the socket
+        float distance = Vector3.Distance(transform.position, interactableBox.transform.position);
+        if(distance < 1.5f)
         {
-            Message.SetActive(true);
-
-            //if the player presses E, the box is placed in the socket
-            if(Input.GetKeyDown(KeyCode.E))
-            {
-                placed = true;
-                Message.SetActive(false);
-                interactableBoxScript.enabled = false;
-                interactableBox.transform.position = transform.position;
-                interactableBox.transform.rotation = transform.rotation;
-                //make the box a child of the socket
-                interactableBox.transform.SetParent(transform);
-                //turn off the box's rigidbody2d 
-                interactableBox.GetComponent<Rigidbody2D>().isKinematic = true;
-                interactableBox.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                //turn off rotation
-                interactableBox.GetComponent<Rigidbody2D>().freezeRotation = true;
-                //turn off the box's collider2d
-                interactableBox.GetComponent<Collider2D>().enabled = false;
-                playerController.isHoldingBox = false;
-                //invoke the event
-                OnBoxPlaced.Invoke();
-            }
+            //turn off the box's rigidbody and collider
+            interactableBox.GetComponent<Rigidbody2D>().isKinematic = true;
+            interactableBox.GetComponent<BoxCollider2D>().enabled = false;
+            //set velocity to 0
+            interactableBox.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            //set the box's position to the socket's position
+            interactableBox.transform.position = transform.position;
+            //set the box's rotation to the socket's rotation
+            interactableBox.transform.rotation = transform.rotation;
+            //set the box's parent to the socket
+            interactableBox.transform.parent = transform;
+            //turn the interactable box message off
+            interactableBoxScript.Message.SetActive(false);
+            //turn off the interactable box script
+            interactableBoxScript.enabled = false;
+            placed = true;
+            //turn on the particle system
+            particleSystem.Play();
+            //invoke the event
+            OnBoxPlaced.Invoke();
         }
-        else
-        {
-            Message.SetActive(false);
-        }     
+
+
     }
 }

@@ -5,16 +5,12 @@ using UnityEngine;
 public class BoxSocketSensor : MonoBehaviour
 {
     public bool isTriggered = false;
-    private PlayerController playerController;
 
-    void Awake()
-    {
-        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
-    }
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player" && playerController.isHoldingBox)
+        if (collision.gameObject.tag == "Socket")
         {
             isTriggered = true;
         } 
@@ -22,7 +18,7 @@ public class BoxSocketSensor : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Socket")
         {
             isTriggered = false;
         }

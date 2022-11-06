@@ -9,7 +9,7 @@ public class PickUpController : MonoBehaviour
     public BoxCollider2D boxCollider;
     public Transform player, objHolder;
     public float pickUpRange = 2f;
-    public float throwForce = 10f;
+    public float throwUpForce = 10f;
     public float throwSideForce = 5f;
     public bool isHolding;
     
@@ -38,9 +38,11 @@ public class PickUpController : MonoBehaviour
                 rb.velocity = player.GetComponent<Rigidbody2D>().velocity;
                 //make box rotation match player rotation
                 transform.rotation = player.rotation;
-                //turn off the message
-                //interactableBox.Message.SetActive(false);
+                //turn off the interactable box
                 interactableBox.enabled = false;
+                //turn off the message
+                interactableBox.Message.SetActive(false);
+                
                 player.GetComponent<PlayerController>().isHoldingBox = true;
 
             }
@@ -56,20 +58,18 @@ public class PickUpController : MonoBehaviour
                 transform.SetParent(null);
                 //make box rotation match player rotation
                 transform.rotation = player.rotation;
-                //throw box in a parabolic arc in the direction the player is facing
-                //check direction player is facing
                 //box carries momentum of player
                 rb.velocity = player.GetComponent<Rigidbody2D>().velocity;
+                //throw box in a parabolic arc in the direction the player is facing
                 if(player.GetComponent<PlayerController>().isFacingRight)
                 {
-                    rb.AddForce(new Vector2(throwSideForce, throwForce), ForceMode2D.Impulse);
+                    rb.AddForce(new Vector2(throwSideForce, throwUpForce), ForceMode2D.Impulse);
                 }
                 else
                 {
-                    rb.AddForce(new Vector2(-throwSideForce, throwForce), ForceMode2D.Impulse);
+                    rb.AddForce(new Vector2(-throwSideForce, throwUpForce), ForceMode2D.Impulse);
                 }
                 player.GetComponent<PlayerController>().isHoldingBox = false;
-                //interactableBox.Message.SetActive(true);
                 interactableBox.enabled = true;
             }
         }
