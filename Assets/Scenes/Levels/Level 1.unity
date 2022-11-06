@@ -3594,6 +3594,42 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7700964917034953427, guid: be848d2195d874b4d8d8207c454f6277, type: 3}
+      propertyPath: inColor.b
+      value: 0.10866976
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700964917034953427, guid: be848d2195d874b4d8d8207c454f6277, type: 3}
+      propertyPath: inColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700964917034953427, guid: be848d2195d874b4d8d8207c454f6277, type: 3}
+      propertyPath: inColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700964917034953427, guid: be848d2195d874b4d8d8207c454f6277, type: 3}
+      propertyPath: outColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700964917034953427, guid: be848d2195d874b4d8d8207c454f6277, type: 3}
+      propertyPath: outColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700964917034953427, guid: be848d2195d874b4d8d8207c454f6277, type: 3}
+      propertyPath: outColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700964917034953427, guid: be848d2195d874b4d8d8207c454f6277, type: 3}
+      propertyPath: isDissolving
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700964917034953427, guid: be848d2195d874b4d8d8207c454f6277, type: 3}
+      propertyPath: dissolveSpeed
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7700964917034953427, guid: be848d2195d874b4d8d8207c454f6277, type: 3}
+      propertyPath: dissolveAmount
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be848d2195d874b4d8d8207c454f6277, type: 3}
 --- !u!1 &1558997199 stripped

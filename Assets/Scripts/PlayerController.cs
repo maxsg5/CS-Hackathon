@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     #region public variables
     //public variables are visible in the inspector by default
     //try to minimize the number of public variables and use private variables with public getters and setters instead when possible
+    public Healthbar healthbar;
+    
     #endregion
 
     #region private variables
@@ -20,11 +22,13 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private AudioSource audioSource;
     private BoxCollider2D boxCollider;
+    private DissolveController dissolveController;
     private Vector2 moveDirection = Vector2.zero;
     private bool isJumping = false;
     private float boxColliderHeight;
     private float spriteHeight;
-    public Healthbar healthbar;
+
+    
 
     //[serializefield] makes it visible in the inspector but the variable is still private
     [SerializeField] private float moveSpeed = 5f; 
@@ -45,6 +49,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         boxCollider = GetComponent<BoxCollider2D>();
+        dissolveController = GetComponent<DissolveController>();
     }
 
     // Start is called before the first frame update
@@ -54,7 +59,8 @@ public class PlayerController : MonoBehaviour
         boxColliderHeight = boxCollider.size.y;
         spriteHeight = spriteRenderer.bounds.size.y;
         health = maxHealth;
-        healthbar.MaxHealth(maxHealth);
+        //healthbar.MaxHealth(maxHealth);
+        dissolveController.isDissolving = false;
 
     }
 
