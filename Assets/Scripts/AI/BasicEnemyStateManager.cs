@@ -4,75 +4,120 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using AI;
-public class BasicEnemyStateManager : MonoBehaviour
-{
-    [Header("Current State")]
-    public State currentState; //The current state of the enemy
-    
-    [Header("States")]
-    public BasicEnemyPatrolState patrolState = new BasicEnemyPatrolState();
-    public BasicEnemyChaseState chaseState = new BasicEnemyChaseState();
-    
-    [Header("Patrol Variables")]
-    public Transform target; //The player
-    public Transform[] waypoints; //The points the enemy will patrol between
-    public int waypointIndex = 0; //The current patrol point the enemy is moving towards
-    public float moveSpeed = 5f; //The speed the enemy moves at
-    
-    [Header("Chase Variables")]
-    public float chaseSpeed = 10f; //The speed the enemy moves at when chasing the player
-    public float chaseDistance = 10f; //The distance the enemy will chase the player from
-    public float chaseWaitTime = 5f; //The amount of time the enemy will wait at the last patrol point before returning to patrol
-    public float chaseTimer; //The timer for the chase wait time
-
-    [Header("Attack Variables")]
-    public float attackRange = 1f; //The range the enemy can attack the player from
-    public float attackRate = 1f; //The rate at which the enemy can attack the player
-    public float attackDamage = 10f; //The damage the enemy deals to the player
-    public float attackTimer = 0f; //The timer for the attack rate
-    
-    
-    private Rigidbody2D rb; //The rigidbody of the enemy
-
-
-    private void Awake()
+namespace AI {
+    public class BasicEnemyStateManager : MonoBehaviour
     {
-        rb = GetComponent<Rigidbody2D>();
-    }
+        [Header("Current State")]
+        public State currentState; //The current state of the enemy
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //starting state for the FSM
-        currentState = patrolState;
-        //"this" is a reference to the current context (this EXACT monobehaviour script)
-        currentState.EnterState(this);
+        [Header("States")]
+        public BasicEnemyPatrolState patrolState = new BasicEnemyPatrolState();
+        public BasicEnemyChaseState chaseState = new BasicEnemyChaseState();
+        public BasicEnemyAttackState attackState = new BasicEnemyAttackState();
 
-    }
+        [Header("Patrol Variables")]
+        public Transform target; //The player
+        public Transform[] waypoints; //The points the enemy will patrol between
+        public int waypointIndex = 0; //The current patrol point the enemy is moving towards
+        public float moveSpeed = 1f; //The speed the enemy moves at
+        public float PatrolWaitTime = 5f; //The amount of time the enemy will wait at the last patrol point before returning to patrol
 
-    // Update is called once per frame
-    void Update()
-    {
-        currentState.UpdateState(this); //update the current state every frame
-    }
+        [Header("Chase Variables")]
+        public float chaseSpeed = 10f; //The speed the enemy moves at when chasing the player
+        public float chaseDistance = 10f; //The distance the enemy will chase the player from
+        public float chaseTimer; //The timer for the chase wait time
 
-    private void OnCollisionEnter2D(Collision2D col)
-    {
-        currentState.OnCollisionEnter2D(this, col);
-    }
+        [Header("Attack Variables")]
+        public float attackRange = 1f; //The range the enemy can attack the player from
+        public float attackRate = 1f; //The rate at which the enemy can attack the player
+        public float attackDamage = 10f; //The damage the enemy deals to the player
+        public float attackTimer = 0f; //The timer for the attack rate
 
-    public void SwitchState(State newState)
-    {
-        currentState = newState; //set the current state to the new state
-        currentState.EnterState(this); //enter the new state
-    }
-    
-    public Rigidbody2D GetRigidbody2D()
-    {
-        return rb;
-    }
-    
-    #if UNITY_EDITOR
+
+        public Rigidbody2D rb; //The rigidbody of the enemy
+        public Animator anim; // The animator of the enemy
+        public SpriteRenderer sr; // The sprite renderer of the enemy
+
+        // This bool is equal to if the enemy is colliding the player
+        public bool IsCollidingPlayer = false;
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody2D>();
+            anim = GetComponent<Animator>();
+            sr = GetComponent<SpriteRenderer>();
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            //starting state for the FSM
+            currentState = patrolState;
+            //"this" is a reference to the current context (this EXACT monobehaviour script)
+            currentState.Enter(this);
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            currentState.Update(this); //update the current state every frame
+            // This is only for the attack state to apply damage
+            if (currentState == attackState)
+            {
+                StartCoroutine(Attacking(1f));
+            }
+            // Enemy does the peace animation when player dies
+            if (GameManager.gameManager._playerHealth.Health <= 0)
+            {
+                anim.SetBool("IsPeace", true);
+            }
+        }
+
+        public void SwitchState(State newState)
+        {
+            currentState = newState; //set the current state to the new state
+            currentState.Enter(this); //enter the new state
+        }
+
+        public Rigidbody2D GetRigidbody2D()
+        {
+            return rb;
+        }
+
+        //This is take damage from the player. Should be synced with the punch and take into account attack rate
+        IEnumerator Attacking(float secondsLeft)
+        {
+            while (secondsLeft > 0f)
+            {
+                //anim.SetBool("IsAttack", true);
+                if (IsCollidingPlayer == true)
+                {
+                    GameManager.gameManager.RemoveHealth(0.1f);
+                }
+                yield return new WaitForSeconds(1); // Use the attack rate here.
+                //anim.SetBool("IsAttack", false);
+                secondsLeft -= 0.1f;
+            }
+        }
+
+        //Checking if the player is colliding with the Enemy
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == "Player")
+            {
+                IsCollidingPlayer = true;
+            }
+        }
+
+        // Checks if the player is no longer colliding with the Enemy
+        public void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == "Player")
+            {
+                IsCollidingPlayer = false;
+            }
+        }
+#if UNITY_EDITOR
     //draw the radius for the chase distance in green
     private void OnDrawGizmos()
     {
@@ -86,6 +131,6 @@ public class BasicEnemyStateManager : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-    
-    #endif
-}
+    }
+#endif
+    }
