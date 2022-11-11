@@ -40,6 +40,8 @@ namespace AI {
 
         // This bool is equal to if the enemy is colliding the player
         public bool IsCollidingPlayer = false;
+
+        private bool isAttacking = false; //This bool is equal to if the enemy is attacking
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -64,7 +66,11 @@ namespace AI {
             // This is only for the attack state to apply damage
             if (currentState == attackState)
             {
-                StartCoroutine(Attacking(1f));
+                if(!isAttacking)
+                {
+                    isAttacking = true;
+                    StartCoroutine(Attack());
+                }
             }
             // Enemy does the peace animation when player dies
             if (GameManager.gameManager._playerHealth.Health <= 0)
@@ -85,19 +91,16 @@ namespace AI {
         }
 
         //This is take damage from the player. Should be synced with the punch and take into account attack rate
-        IEnumerator Attacking(float secondsLeft)
+        IEnumerator Attack()
         {
-            while (secondsLeft > 0f)
+            anim.SetBool("IsAttack", true);
+            yield return new WaitForSeconds(1.017f); //This is the length of the attack animation
+            if (IsCollidingPlayer)
             {
-                //anim.SetBool("IsAttack", true);
-                if (IsCollidingPlayer == true)
-                {
-                    GameManager.gameManager.RemoveHealth(0.1f);
-                }
-                yield return new WaitForSeconds(1); // Use the attack rate here.
-                //anim.SetBool("IsAttack", false);
-                secondsLeft -= 0.1f;
+                GameManager.gameManager.RemoveHealth(attackDamage);
             }
+            isAttacking = false;
+            anim.SetBool("IsAttack", false);
         }
 
         //Checking if the player is colliding with the Enemy
@@ -133,4 +136,4 @@ namespace AI {
     }
     }
 #endif
-    }
+}

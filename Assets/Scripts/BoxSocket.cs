@@ -12,13 +12,13 @@ public class BoxSocket : MonoBehaviour
     private InteractableBox interactableBoxScript;
     private PlayerController playerController;
     private bool placed = false;
-    private ParticleSystem particleSystem;
+    private ParticleSystem ps;
    
     void Awake()
     {
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         interactableBoxScript = interactableBox.GetComponent<InteractableBox>();
-        particleSystem = GetComponent<ParticleSystem>();
+        ps = GetComponent<ParticleSystem>();
     }
 
    
@@ -48,7 +48,7 @@ public class BoxSocket : MonoBehaviour
             interactableBoxScript.enabled = false;
             placed = true;
             //turn on the particle system
-            particleSystem.Play();
+            ps.Play();
             //invoke the event
             OnBoxPlaced.Invoke();
         }
