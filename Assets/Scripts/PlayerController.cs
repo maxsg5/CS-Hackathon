@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private bool isCrouching = false;
-    [SerializeField] private bool canControl = true;
 
     #endregion
 
@@ -69,8 +68,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!canControl)
-            return;
+        
         
         //get player input
         float horizontal = Input.GetAxisRaw("Horizontal");
@@ -136,6 +134,7 @@ public class PlayerController : MonoBehaviour
         {
             PlayDeadAnimation = true;
             animator.SetTrigger("Dead");
+            Respawn();
         }
     }
 
@@ -164,29 +163,33 @@ public class PlayerController : MonoBehaviour
 
    public void Respawn()
     {
-        // Respawn player at spawn point
+        rb.isKinematic = true;
+        rb.velocity = Vector2.zero;
+        //fade out the player
+        dissolveController.isDissolving = true;
+        //wait for 1 second then move the player to the spawn point
+        StartCoroutine(RespawnCoroutine());
+        PlayDeadAnimation = false;
+        GameManager.gameManager.AddHealth(GameManager.gameManager._playerHealth.MaxHealth);
+
+    }
+
+    
+
+    
+
+    IEnumerator RespawnCoroutine()
+    {
+        yield return new WaitForSeconds(3f);
         // Reset health
-        health = maxHealth;
+        
+        
         // Reset position
         transform.position = spawnPoint;
-
-    }
-
-    public void DisableControl()
-    {
-        canControl = false;
-        //stop the player from moving
-        rb.velocity = Vector2.zero;
-        //set input to 0
-        moveDirection = Vector2.zero;
-        //set the animation state to idle
-        animator.SetFloat("Speed", 0);
-
-    }
-
-    public void EnableControl()
-    {
-        canControl = true;
+        //fade in the player
+        dissolveController.isDissolving = false;
+        rb.isKinematic = false;
+        animator.SetTrigger("Respawn");
     }
 
     //No use for player health custom commands in the player controller since its controlled by the game manager
