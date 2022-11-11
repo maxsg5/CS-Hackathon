@@ -7,6 +7,8 @@ public class StartCutscene : MonoBehaviour
     public PlayerController player;
     public Animator cameraAnimator;
     public AudioClip cutsceneAudio;
+    public Bridge bridge;
+    public GameObject interactableBox;
     AudioSource audioSource;
     void Awake()
     {
@@ -19,8 +21,13 @@ public class StartCutscene : MonoBehaviour
             //turn off player control
             player.DisableControl();
             cameraAnimator.SetBool("cutscene1", true);
-            audioSource.PlayOneShot(cutsceneAudio); //audio clip is 10.8 seconds long
+            audioSource.PlayOneShot(cutsceneAudio); //audio clip is 10.8 seconds long, start moving bridge at 4 seconds
             StartCoroutine(Cutscene1());
+            StartCoroutine(MoveBridge());
+            StartCoroutine(ShowBox());
+            //disable the collider so it only triggers once
+            GetComponent<Collider2D>().enabled = false;
+
         }
     }
 
@@ -29,5 +36,17 @@ public class StartCutscene : MonoBehaviour
         yield return new WaitForSeconds(10.8f);
         cameraAnimator.SetBool("cutscene1", false);
         player.EnableControl();
+    }
+
+    IEnumerator MoveBridge()
+    {
+        yield return new WaitForSeconds(4f);
+        bridge.MoveBridge();
+    }
+
+    IEnumerator ShowBox()
+    {
+        yield return new WaitForSeconds(7f);
+        interactableBox.SetActive(true);
     }
 }

@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     public Healthbar healthbar;
     public bool isHoldingBox = false;
     public bool isFacingRight = true;
-    public GameObject spawnPoint;
     #endregion
 
     #region private variables
@@ -29,8 +28,9 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
     private float boxColliderHeight;
     private float spriteHeight;
+    private Vector3 spawnPoint;
 
-    
+
 
     //[serializefield] makes it visible in the inspector but the variable is still private
     [SerializeField] private float moveSpeed = 5f; 
@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         boxCollider = GetComponent<CapsuleCollider2D>();
         dissolveController = GetComponent<DissolveController>();
+        spawnPoint = transform.position;
     }
 
     // Start is called before the first frame update
@@ -203,7 +204,7 @@ public class PlayerController : MonoBehaviour
         // Reset health
         health = maxHealth;
         // Reset position
-        transform.position = spawnPoint.transform.position;
+        transform.position = spawnPoint;
 
     }
 
@@ -214,6 +215,8 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector2.zero;
         //set input to 0
         moveDirection = Vector2.zero;
+        //set the animation state to idle
+        animator.SetFloat("Speed", 0);
 
     }
 
