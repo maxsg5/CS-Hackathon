@@ -14,11 +14,13 @@ public class InteractableBox : MonoBehaviour
     private bool isBeingHeld = false;
     private PickUpController pickUpController;
     private Rigidbody2D rb;
+    private Vector3 spawnPoint;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         pickUpController = GetComponent<PickUpController>();
+        spawnPoint = transform.position;
     }
 
 
@@ -56,6 +58,11 @@ public class InteractableBox : MonoBehaviour
         }
         
         
+    }
+
+    public void Respawn()
+    {
+        transform.position = spawnPoint;
     }
     
     

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Socket
+  - Box
   - Enemy
   layers:
   - Default

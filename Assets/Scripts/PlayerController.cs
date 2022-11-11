@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Rigidbody2D))] //[RequireComponent(typeof(BoxCollider2D))] this tells unity to add a boxcollider to the object if it doesn't already have one
 [RequireComponent(typeof(Animator))] 
 [RequireComponent(typeof(AudioSource))] 
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(CapsuleCollider2D))]
 public class PlayerController : MonoBehaviour
 {
     
@@ -23,20 +23,24 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private AudioSource audioSource;
-    private BoxCollider2D boxCollider;
+    private CapsuleCollider2D boxCollider;
     private DissolveController dissolveController;
     private Vector2 moveDirection = Vector2.zero;
     private bool isJumping = false;
     private float boxColliderHeight;
     private float spriteHeight;
+    private Vector3 spawnPoint;
     private bool isCollidiingEnemy;
     
+
 
     //[serializefield] makes it visible in the inspector but the variable is still private
     [SerializeField] private float moveSpeed = 5f; 
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private bool isCrouching = false;
+    [SerializeField] private bool canControl = true;
+
     #endregion
 
     #region unity methods
@@ -48,8 +52,9 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<CapsuleCollider2D>();
         dissolveController = GetComponent<DissolveController>();
+        spawnPoint = transform.position;
     }
 
     // Start is called before the first frame update
@@ -64,6 +69,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!canControl)
+            return;
+        
         //get player input
         float horizontal = Input.GetAxisRaw("Horizontal");
         //check if the player is jumping
@@ -153,7 +161,36 @@ public class PlayerController : MonoBehaviour
 
     #region custom methods
     //custom methods are methods that you create yourself go here
+
+   public void Respawn()
+    {
+        // Respawn player at spawn point
+        // Reset health
+        health = maxHealth;
+        // Reset position
+        transform.position = spawnPoint;
+
+    }
+
+    public void DisableControl()
+    {
+        canControl = false;
+        //stop the player from moving
+        rb.velocity = Vector2.zero;
+        //set input to 0
+        moveDirection = Vector2.zero;
+        //set the animation state to idle
+        animator.SetFloat("Speed", 0);
+
+    }
+
+    public void EnableControl()
+    {
+        canControl = true;
+    }
+
     //No use for player health custom commands in the player controller since its controlled by the game manager
+
     #endregion
 
     #if UNITY_EDITOR
