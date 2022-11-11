@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour
     {
         // Respawn player at spawn point
         // Reset health
-        health = maxHealth;
+        GameManager.gameManager._playerHealth._currentHealth = GameManager.gameManager._playerHealth._maxHealth;
         // Reset position
         transform.position = spawnPoint;
 
