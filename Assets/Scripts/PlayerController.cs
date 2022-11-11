@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 // 2D Platformer Controller
 [RequireComponent(typeof(Rigidbody2D))] //[RequireComponent(typeof(BoxCollider2D))] this tells unity to add a boxcollider to the object if it doesn't already have one
 [RequireComponent(typeof(Animator))] 
@@ -12,9 +13,9 @@ public class PlayerController : MonoBehaviour
     #region public variables
     //public variables are visible in the inspector by default
     //try to minimize the number of public variables and use private variables with public getters and setters instead when possible
-    public Healthbar healthbar;
     public bool isHoldingBox = false;
     public bool isFacingRight = true;
+    public bool PlayDeadAnimation = false;
     #endregion
 
     #region private variables
@@ -29,7 +30,8 @@ public class PlayerController : MonoBehaviour
     private float boxColliderHeight;
     private float spriteHeight;
     private Vector3 spawnPoint;
-
+    private bool isCollidiingEnemy;
+    
 
 
     //[serializefield] makes it visible in the inspector but the variable is still private
@@ -37,9 +39,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private bool isCrouching = false;
-    [SerializeField] private float health;
-    [SerializeField] private float maxHealth = 100f;
     [SerializeField] private bool canControl = true;
+
     #endregion
 
     #region unity methods
@@ -62,10 +63,7 @@ public class PlayerController : MonoBehaviour
         //initialize variables
         boxColliderHeight = boxCollider.size.y;
         spriteHeight = spriteRenderer.bounds.size.y;
-        health = maxHealth;
-        //healthbar.MaxHealth(maxHealth);
         dissolveController.isDissolving = false;
-
     }
 
     // Update is called once per frame
@@ -85,8 +83,11 @@ public class PlayerController : MonoBehaviour
         if (isGrounded && isJumping)
         {
             //make the player jump
-            rb.velocity = Vector2.up * jumpForce;
-            animator.SetBool("Jump", true);
+            if (PlayDeadAnimation == false)
+            {
+                rb.velocity = Vector2.up * jumpForce;
+                animator.SetBool("Jump", true);
+            }
         }
         else
         {
@@ -96,7 +97,7 @@ public class PlayerController : MonoBehaviour
         isCrouching = Input.GetButton("Crouch");
 
         //check if the player is crouching
-        if (isCrouching)
+        if (isCrouching && PlayDeadAnimation == false)
         {
             //set y scale to 0.5
             transform.localScale = new Vector2(transform.localScale.x, 0.3f/2f);
@@ -108,44 +109,39 @@ public class PlayerController : MonoBehaviour
         }
         
         //set move direction
-        moveDirection = new Vector2(horizontal, 0).normalized;
+        if (PlayDeadAnimation == false)
+        {
+            moveDirection = new Vector2(horizontal, 0).normalized;
+        } else
+        {
+            moveDirection = new Vector2(0, 0).normalized;
+        }
 
         //change the animation state based on the player's movement
         animator.SetFloat("Speed", Mathf.Abs(horizontal));
 
         //flip the player if they are moving in the opposite direction
-        if (horizontal > 0)
+        if (horizontal > 0 && PlayDeadAnimation == false)
         {
             spriteRenderer.flipX = false;
             isFacingRight = true;
         }
-        if (horizontal < 0)
+        if (horizontal < 0 && PlayDeadAnimation == false)
         {
             spriteRenderer.flipX = true;  
             isFacingRight = false;
         }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            RemoveHealth(5.0f);
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            AddHealth(5.0f);
-        }
 
-        // Destroy charcter function
-        if (health == 0)
+        if (GameManager.gameManager._playerHealth.Health <= 0 && PlayDeadAnimation == false)
         {
-            Debug.Log("Player dead");
-            // Add code to destory player when health is equal to 0
+            PlayDeadAnimation = true;
+            animator.SetTrigger("Dead");
         }
     }
 
     //FixedUpdate is called once per physics update
     void FixedUpdate()
     {
-       
-
         //if the player is crouching
         if (isCrouching)
         {
@@ -160,43 +156,11 @@ public class PlayerController : MonoBehaviour
 
         
     }
-    
+
     #endregion
 
     #region custom methods
     //custom methods are methods that you create yourself go here
-
-    // Gets current health of player
-    void GetHealth()
-    {
-        // Player health
-    }
-    // Removes health from player
-    void RemoveHealth(float amount)
-    {
-        if (health == 0)
-        {
-            return;
-        }
-        else
-        {
-            health -= amount;
-            healthbar.CurrentHealth(health);
-        }
-    }
-    // Adds health to player
-    void AddHealth(float amount)
-    {
-        if (health == maxHealth)
-        {
-            Debug.Log("Player is at max health");
-        }
-        else
-        {
-            health += amount;
-            healthbar.CurrentHealth(health);
-        }
-    }
 
    public void Respawn()
     {
@@ -224,6 +188,9 @@ public class PlayerController : MonoBehaviour
     {
         canControl = true;
     }
+
+    //No use for player health custom commands in the player controller since its controlled by the game manager
+
     #endregion
 
     #if UNITY_EDITOR

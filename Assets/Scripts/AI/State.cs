@@ -1,8 +1,11 @@
 using UnityEngine;
 
-public abstract class State 
+namespace AI
 {
-    public abstract void EnterState(BasicEnemyStateManager stateManager);
-    public abstract void UpdateState(BasicEnemyStateManager stateManager);
-    public abstract void OnCollisionEnter2D(BasicEnemyStateManager stateManager, Collision2D collision);
+    public abstract class State
+    {
+        public abstract void Enter(BasicEnemyStateManager stateManager);
+        public abstract void Update(BasicEnemyStateManager stateManager);
+        public abstract void Exit(BasicEnemyStateManager stateManager);
+    }
 }

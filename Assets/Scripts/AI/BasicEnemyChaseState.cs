@@ -4,37 +4,38 @@ namespace AI
 {
     public class BasicEnemyChaseState : State
     {
-        public override void EnterState(BasicEnemyStateManager stateManager)
+        //public MonoBehaviour monoBehaviour;
+        public override void Enter(BasicEnemyStateManager stateManager)
         {
             Debug.Log(stateManager + " Entered Chase State");
+            // Setting the walk animation
+            stateManager.anim.SetBool("IsWalk", true);
+            // Flipping the sprite to correct direction it is moving towards
+            stateManager.sr.flipX = (stateManager.transform.position.x > stateManager.target.transform.position.x) ? true : false;
         }
 
-        public override void UpdateState(BasicEnemyStateManager stateManager)
-        {
-            //chase the player
-            Rigidbody2D rb = stateManager.GetRigidbody2D();
-            
-            Vector2 direction = stateManager.target.transform.position - stateManager.transform.position;
-            direction.Normalize();
-            rb.velocity = direction.normalized * stateManager.chaseSpeed;
-            
+        public override void Update(BasicEnemyStateManager stateManager)
+        {   
+            //This chases the player and flips the sprite accoring to the direction its facing/moving toward
+            Vector2 direction = (stateManager.target.transform.position - stateManager.transform.position).normalized;
+            stateManager.rb.velocity = new Vector2(direction.x * stateManager.chaseSpeed, stateManager.rb.velocity.y);
+            stateManager.sr.flipX = (direction.x < 0) ? true : false;
+
             //if the player is within the attack range, transition to attack state
             if (Vector2.Distance(stateManager.transform.position, stateManager.target.transform.position) <= stateManager.attackRange)
             {
-                //TODO: transition to attack state
+                stateManager.SwitchState(stateManager.attackState);
             }
 
             //if the player is out of range, go back to patrol
-            if (Vector3.Distance(stateManager.transform.position, stateManager.target.transform.position) > stateManager.chaseDistance)
+            if (Vector2.Distance(stateManager.transform.position, stateManager.target.transform.position) > stateManager.chaseDistance)
             {
                 stateManager.SwitchState(stateManager.patrolState);
             }
-        
         }
-
-        public override void OnCollisionEnter2D(BasicEnemyStateManager stateManager, Collision2D collision)
+        public override void Exit(BasicEnemyStateManager stateManager)
         {
-            Debug.Log("collided with " + collision.gameObject.name);
+            Debug.Log("Chase state exit");
         }
     }
 }
