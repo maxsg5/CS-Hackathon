@@ -317,7 +317,7 @@ GameObject:
   - component: {fileID: 607357427149695651}
   m_Layer: 0
   m_Name: InteractableBox
-  m_TagString: Untagged
+  m_TagString: Box
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -459,6 +459,7 @@ MonoBehaviour:
   circleSensor: {fileID: 1403490680630891260}
   boxSocketSensor: {fileID: 7818928466224948748}
   Message: {fileID: 1403490680976942830}
+  Socket: {fileID: 0}
 --- !u!114 &607357427149695651
 MonoBehaviour:
   m_ObjectHideFlags: 0
