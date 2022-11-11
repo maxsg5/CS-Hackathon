@@ -163,13 +163,13 @@ public class PlayerController : MonoBehaviour
 
    public void Respawn()
     {
+        //prevent player input
         rb.isKinematic = true;
         rb.velocity = Vector2.zero;
         //fade out the player
         dissolveController.isDissolving = true;
         //wait for 1 second then move the player to the spawn point
         StartCoroutine(RespawnCoroutine());
-        PlayDeadAnimation = false;
         GameManager.gameManager.AddHealth(GameManager.gameManager._playerHealth.MaxHealth);
 
     }
@@ -181,9 +181,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator RespawnCoroutine()
     {
         yield return new WaitForSeconds(3f);
-        // Reset health
-        
-        
+        PlayDeadAnimation = false;
         // Reset position
         transform.position = spawnPoint;
         //fade in the player

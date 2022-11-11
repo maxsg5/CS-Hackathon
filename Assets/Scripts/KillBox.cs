@@ -9,7 +9,7 @@ public class KillBox : MonoBehaviour
         //respawn the player if they fall off the map
         if (collision.gameObject.CompareTag("Player"))
         {
-            collision.gameObject.GetComponent<PlayerController>().Respawn();
+            GameManager.gameManager.RemoveHealth(GameManager.gameManager._playerHealth.Health);
         }
 
         //respawn the box if it falls off the map
