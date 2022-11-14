@@ -5,7 +5,8 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
    Animator animator;
-   void Awake()
+    public float waitTime = 20f;
+    void Awake()
    {
         animator = GetComponent<Animator>();
    }
@@ -17,7 +18,7 @@ public class Door : MonoBehaviour
 
    private IEnumerator Opening()
    {
-          yield return new WaitForSeconds(20f);
+          yield return new WaitForSeconds(waitTime);
           animator.SetTrigger("Open");
      }
 }

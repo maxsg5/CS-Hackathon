@@ -31,6 +31,7 @@ public class BoxSocket : MonoBehaviour
         float distance = Vector3.Distance(transform.position, interactableBox.transform.position);
         if(distance < 1.5f)
         {
+            Debug.Log("Box is in socket");
             //turn off the box's rigidbody and collider
             interactableBox.GetComponent<Rigidbody2D>().isKinematic = true;
             interactableBox.GetComponent<BoxCollider2D>().enabled = false;

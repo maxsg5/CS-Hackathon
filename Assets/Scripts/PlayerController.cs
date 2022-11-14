@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 // 2D Platformer Controller
-[RequireComponent(typeof(Rigidbody2D))] //[RequireComponent(typeof(BoxCollider2D))] this tells unity to add a boxcollider to the object if it doesn't already have one
+[RequireComponent(typeof(Rigidbody2D))] //[RequireComponent(typeof(capsuleCollider2D))] this tells unity to add a capsuleCollider to the object if it doesn't already have one
 [RequireComponent(typeof(Animator))] 
 [RequireComponent(typeof(AudioSource))] 
 [RequireComponent(typeof(CapsuleCollider2D))]
@@ -23,11 +23,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private AudioSource audioSource;
-    private CapsuleCollider2D boxCollider;
+    private CapsuleCollider2D capsuleCollider;
     private DissolveController dissolveController;
     private Vector2 moveDirection = Vector2.zero;
     private bool isJumping = false;
-    private float boxColliderHeight;
+    private float capsuleColliderHeight;
     private float spriteHeight;
     private Vector3 spawnPoint;
     private bool isCollidiingEnemy;
@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        boxCollider = GetComponent<CapsuleCollider2D>();
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
         dissolveController = GetComponent<DissolveController>();
         spawnPoint = transform.position;
     }
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //initialize variables
-        boxColliderHeight = boxCollider.size.y;
+        capsuleColliderHeight = capsuleCollider.size.y;
         spriteHeight = spriteRenderer.bounds.size.y;
         dissolveController.isDissolving = false;
     }
@@ -74,8 +74,9 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         //check if the player is jumping
         isJumping = Input.GetButtonDown("Jump");
-        //check grounded by raycast
-        isGrounded = Physics2D.Raycast(boxCollider.bounds.center, Vector2.down, boxCollider.bounds.extents.y + 0.1f, LayerMask.GetMask("Ground"));
+        //check grounded by circlecast
+        isGrounded = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y - (spriteHeight / 2)), 0.3f);
+
 
         //if the player can jump and is jumping
         if (isGrounded && isJumping)
@@ -204,13 +205,13 @@ public class PlayerController : MonoBehaviour
     {
         if (Application.isPlaying)
         {
-            //draw a raycast to show where the player is grounded
+            //draw circle to show the grounded check
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(boxCollider.bounds.center, new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.center.y - boxCollider.bounds.extents.y - 0.1f));
+            Gizmos.DrawWireSphere(new Vector2(transform.position.x, transform.position.y - (spriteHeight / 2)), 0.3f);
 
             //draw the collider size
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(boxCollider.bounds.center, new Vector2(boxCollider.size.x, boxCollider.size.y));
+            Gizmos.DrawWireCube(capsuleCollider.bounds.center, new Vector2(capsuleCollider.size.x, capsuleCollider.size.y));
         }
     }
     

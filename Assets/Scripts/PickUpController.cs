@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PickUpController : MonoBehaviour
 {
-    public InteractableBox interactableBox;
-    public Rigidbody2D rb;
-    public BoxCollider2D boxCollider;
+    InteractableBox interactableBox;
+    Rigidbody2D rb;
+    BoxCollider2D boxCollider;
     public Transform player, objHolder;
     public float pickUpRange = 2f;
     public float throwUpForce = 10f;
@@ -18,6 +18,9 @@ public class PickUpController : MonoBehaviour
     
     void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        interactableBox = GetComponent<InteractableBox>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         spawnPoint = transform;
         dissolveController = GetComponent<DissolveController>();
