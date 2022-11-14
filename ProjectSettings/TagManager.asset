@@ -11,11 +11,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ground
+  - Test
   - Water
   - UI
-  - 
-  - 
+  - Texts
+  - Background
   - 
   - 
   - 
@@ -46,4 +46,9 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 1382501519
+  - name: Background
+    uniqueID: 3542861487
+    locked: 0
+  - name: Text
+    uniqueID: 1685637335
     locked: 0
