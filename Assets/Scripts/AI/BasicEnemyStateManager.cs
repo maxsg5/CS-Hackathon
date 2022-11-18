@@ -39,6 +39,7 @@ namespace AI {
         public SpriteRenderer sr; // The sprite renderer of the enemy
         public EnemyHealth enemyHealth;
         private USBDrop usbDrop;
+        private BoxCollider2D collider;
         public bool IsCollidingPlayer = false; // This bool is equal to if the enemy is colliding the player
 
         private bool isAttacking = false; //This bool is equal to if the enemy is attacking
@@ -50,6 +51,7 @@ namespace AI {
             sr = GetComponent<SpriteRenderer>();
             enemyHealth = GetComponent<EnemyHealth>();
             usbDrop = GetComponent<USBDrop>();
+            collider = GetComponent<BoxCollider2D>();
         }
 
         // Start is called before the first frame update
@@ -80,7 +82,7 @@ namespace AI {
             {
                 anim.SetBool("IsPeace", true);
             }
-            if(IsCollidingPlayer == true && Input.GetKeyDown(KeyCode.M))
+            if(IsCollidingPlayer == true && Input.GetMouseButtonDown(0))
             {
                 enemyHealth.RemoveHealth(5f);
             }
@@ -125,8 +127,10 @@ namespace AI {
 
         IEnumerator Dead()
         {
+            collider.size = new Vector2(0.9347277f, 0.6897885f);
+            collider.offset = new Vector2(0.03151369f, 0.09204389f);
             anim.SetBool("IsDead", true);
-            yield return new WaitForSeconds(1.1f);
+            yield return new WaitForSeconds(0.25f);
             anim.SetBool("IsDead", false);
             Destroy(gameObject);
             usbDrop.Drop();
