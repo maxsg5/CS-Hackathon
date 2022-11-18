@@ -72,8 +72,7 @@ public class PlayerController : MonoBehaviour
         //check if the player is jumping
         isJumping = Input.GetButtonDown("Jump");
         //check grounded by circlecast
-        isGrounded = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y - (spriteHeight / 2)), 0.3f);
-
+        isGrounded = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y - (spriteHeight / 2)), 0.3f, LayerMask.GetMask("Ground"));
         //if the player can jump and is jumping
         if (isGrounded && isJumping)
         {
