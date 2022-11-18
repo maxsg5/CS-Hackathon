@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
         }
         if (horizontal < 0 && PlayDeadAnimation == false)
         {
-            spriteRenderer.flipX = true;  
+            spriteRenderer.flipX = true;
             isFacingRight = false;
         }
 
