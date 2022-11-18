@@ -18,7 +18,6 @@ namespace AI
 
         public override void Update(BasicEnemyStateManager stateManager)
         {
-
             // Moving the character to the next waypoint if its not already at it
             if (Vector2.Distance(stateManager.transform.position, stateManager.waypoints[stateManager.waypointIndex].position) > 0.1f)
             {

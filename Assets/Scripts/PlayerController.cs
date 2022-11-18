@@ -31,7 +31,6 @@ public class PlayerController : MonoBehaviour
     private float spriteHeight;
     private Vector3 spawnPoint;
     private bool isCollidiingEnemy;
-    
 
 
     //[serializefield] makes it visible in the inspector but the variable is still private
@@ -68,15 +67,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        
         //get player input
         float horizontal = Input.GetAxisRaw("Horizontal");
         //check if the player is jumping
         isJumping = Input.GetButtonDown("Jump");
         //check grounded by circlecast
         isGrounded = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y - (spriteHeight / 2)), 0.3f);
-
 
         //if the player can jump and is jumping
         if (isGrounded && isJumping)
@@ -174,10 +170,6 @@ public class PlayerController : MonoBehaviour
         GameManager.gameManager.AddHealth(GameManager.gameManager._playerHealth.MaxHealth);
 
     }
-
-    
-
-    
 
     IEnumerator RespawnCoroutine()
     {

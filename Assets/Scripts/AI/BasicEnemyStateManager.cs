@@ -37,16 +37,19 @@ namespace AI {
         public Rigidbody2D rb; //The rigidbody of the enemy
         public Animator anim; // The animator of the enemy
         public SpriteRenderer sr; // The sprite renderer of the enemy
-
-        // This bool is equal to if the enemy is colliding the player
-        public bool IsCollidingPlayer = false;
+        public EnemyHealth enemyHealth;
+        private USBDrop usbDrop;
+        public bool IsCollidingPlayer = false; // This bool is equal to if the enemy is colliding the player
 
         private bool isAttacking = false; //This bool is equal to if the enemy is attacking
+        private bool AddingHealth = false;
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
             sr = GetComponent<SpriteRenderer>();
+            enemyHealth = GetComponent<EnemyHealth>();
+            usbDrop = GetComponent<USBDrop>();
         }
 
         // Start is called before the first frame update
@@ -77,6 +80,22 @@ namespace AI {
             {
                 anim.SetBool("IsPeace", true);
             }
+            if(IsCollidingPlayer == true && Input.GetKeyDown(KeyCode.M))
+            {
+                enemyHealth.RemoveHealth(5f);
+            }
+            if (enemyHealth.Health <= 0)
+            {
+                StartCoroutine(Dead());
+            }
+            if(currentState == patrolState)
+            {
+                if (!AddingHealth)
+                {
+                    AddingHealth = true;
+                    StartCoroutine(AddHealth());
+                }
+            }
         }
 
         public void SwitchState(State newState)
@@ -93,14 +112,31 @@ namespace AI {
         //This is take damage from the player. Should be synced with the punch and take into account attack rate
         IEnumerator Attack()
         {
-            anim.SetBool("IsAttack", true);
-            yield return new WaitForSeconds(1.017f); //This is the length of the attack animation
             if (IsCollidingPlayer)
             {
                 GameManager.gameManager.RemoveHealth(attackDamage);
             }
+            anim.SetBool("IsAttack", true);
+            anim.speed = attackRate;
+            yield return new WaitForSeconds(1.017f/ attackRate); //This is the length of the attack animation
             isAttacking = false;
             anim.SetBool("IsAttack", false);
+        }
+
+        IEnumerator Dead()
+        {
+            anim.SetBool("IsDead", true);
+            yield return new WaitForSeconds(1.1f);
+            anim.SetBool("IsDead", false);
+            Destroy(gameObject);
+            usbDrop.Drop();
+        }
+
+        IEnumerator AddHealth()
+        {
+            enemyHealth.AddHealth(10f);
+            yield return new WaitForSeconds(1f);
+            AddingHealth = false;
         }
 
         //Checking if the player is colliding with the Enemy
