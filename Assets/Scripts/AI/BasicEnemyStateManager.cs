@@ -14,6 +14,7 @@ namespace AI {
         public BasicEnemyPatrolState patrolState = new BasicEnemyPatrolState();
         public BasicEnemyChaseState chaseState = new BasicEnemyChaseState();
         public BasicEnemyAttackState attackState = new BasicEnemyAttackState();
+        public BasicEnemyPeaceState peaceState = new BasicEnemyPeaceState();
 
         [Header("Patrol Variables")]
         public Transform target; //The player
@@ -32,6 +33,7 @@ namespace AI {
         public float attackRate = 1f; //The rate at which the enemy can attack the player
         public float attackDamage = 10f; //The damage the enemy deals to the player
         public float attackTimer = 0f; //The timer for the attack rate
+        public AudioClip attackSound; //The sound the enemy makes when attacking
 
 
         public Rigidbody2D rb; //The rigidbody of the enemy
@@ -40,6 +42,7 @@ namespace AI {
         public EnemyHealth enemyHealth;
         private USBDrop usbDrop;
         private BoxCollider2D collider;
+        private AudioSource audioSource;
         public bool IsCollidingPlayer = false; // This bool is equal to if the enemy is colliding the player
 
         private bool isAttacking = false; //This bool is equal to if the enemy is attacking
@@ -52,6 +55,7 @@ namespace AI {
             enemyHealth = GetComponent<EnemyHealth>();
             usbDrop = GetComponent<USBDrop>();
             collider = GetComponent<BoxCollider2D>();
+            audioSource = GetComponent<AudioSource>();
         }
 
         // Start is called before the first frame update
@@ -80,7 +84,7 @@ namespace AI {
             // Enemy does the peace animation when player dies
             if (GameManager.gameManager._playerHealth.Health <= 0)
             {
-                anim.SetBool("IsPeace", true);
+                SwitchState(peaceState);
             }
             if(IsCollidingPlayer == true && Input.GetMouseButtonDown(0))
             {
@@ -116,6 +120,8 @@ namespace AI {
         {
             if (IsCollidingPlayer)
             {
+                //play attack sound.
+                audioSource.PlayOneShot(attackSound);
                 GameManager.gameManager.RemoveHealth(attackDamage);
             }
             anim.SetBool("IsAttack", true);
@@ -141,6 +147,18 @@ namespace AI {
             enemyHealth.AddHealth(10f);
             yield return new WaitForSeconds(1f);
             AddingHealth = false;
+        }
+
+        public void Peace()
+        {
+            StartCoroutine(ShowPeace());
+        }
+        IEnumerator ShowPeace()
+        {
+            anim.SetBool("IsPeace", true);
+            yield return new WaitForSeconds(3f);
+            anim.SetBool("IsPeace", false);
+            SwitchState(patrolState);
         }
 
         //Checking if the player is colliding with the Enemy
