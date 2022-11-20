@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class USBScript : MonoBehaviour
 {
-    private USBCollected usbCollected;
+    [SerializeField]private USBCollected usbCollected;
 
     void Awake()
     {
