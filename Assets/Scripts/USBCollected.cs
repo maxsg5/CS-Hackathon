@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using UnityEngine.Events;
 public class USBCollected : MonoBehaviour
 {
     public TMP_Text MyText;
     private int score;
+
+    public UnityEvent OnScoreChanged;
+
+
 
     void Start()
     {
@@ -35,5 +39,11 @@ public class USBCollected : MonoBehaviour
     public void AddScore()
     {
         score++;
+        OnScoreChanged.Invoke();
+    }
+
+    public int GetScore()
+    {
+        return score;
     }
 }
