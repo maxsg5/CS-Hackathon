@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7727028823956836922}
   - component: {fileID: 7727028823956836924}
   - component: {fileID: 7727028823956836923}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 7727028824317905044}
   - component: {fileID: 6860402602748784692}
   - component: {fileID: 4092550480806317385}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 7727028825427168802}
-  _maxHealth: 100
+  _maxHealth: 10
 --- !u!82 &4092550480806317385
 AudioSource:
   m_ObjectHideFlags: 0
@@ -387,7 +387,7 @@ GameObject:
   - component: {fileID: 7727028824990526622}
   - component: {fileID: 7727028824990526608}
   - component: {fileID: 7727028824990526623}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -462,7 +462,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7727028825427168801}
   - component: {fileID: 7727028825427168802}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Healthbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -554,7 +554,7 @@ GameObject:
   - component: {fileID: 7727028825504920085}
   - component: {fileID: 7727028825504920087}
   - component: {fileID: 7727028825504920086}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -631,7 +631,7 @@ GameObject:
   - component: {fileID: 7727028825549381550}
   - component: {fileID: 7727028825549381549}
   - component: {fileID: 7727028825549381548}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -86,10 +86,10 @@ namespace AI {
             {
                 SwitchState(peaceState);
             }
-            if(IsCollidingPlayer == true && Input.GetMouseButtonDown(0))
-            {
-                enemyHealth.RemoveHealth(5f);
-            }
+            // if(IsCollidingPlayer == true && Input.GetMouseButtonDown(0))
+            // {
+            //     enemyHealth.RemoveHealth(5f);
+            // }
             if (enemyHealth.Health <= 0)
             {
                 StartCoroutine(Dead());
@@ -113,6 +113,11 @@ namespace AI {
         public Rigidbody2D GetRigidbody2D()
         {
             return rb;
+        }
+
+        public void TakeDamage(float damage)
+        {
+            enemyHealth.RemoveHealth(damage);
         }
 
         //This is take damage from the player. Should be synced with the punch and take into account attack rate

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using AI;
 // 2D Platformer Controller
 [RequireComponent(typeof(Rigidbody2D))] //[RequireComponent(typeof(capsuleCollider2D))] this tells unity to add a capsuleCollider to the object if it doesn't already have one
 [RequireComponent(typeof(Animator))] 
@@ -17,6 +18,11 @@ public class PlayerController : MonoBehaviour
     public bool isFacingRight = true;
     public bool PlayDeadAnimation = false;
     public bool CanMove = true;
+    public bool CanAttack = false;
+    public Transform attackPoint;
+    public float attackRange = 0.5f;
+    public LayerMask enemyLayers;
+    public float attackDamage = 20f;
     #endregion
 
     #region private variables
@@ -102,6 +108,23 @@ public class PlayerController : MonoBehaviour
             //set y scale to 1
             transform.localScale = new Vector2(transform.localScale.x, 0.3f);
         }
+
+        //check if the player is attacking
+        if(Input.GetMouseButtonDown(0) && CanAttack)
+        {
+            animator.SetTrigger("Attack");
+            
+            // Detect enemies in range of attack
+            Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+            // Damage them
+            foreach (Collider2D enemy in hitEnemies)
+            {
+                enemy.GetComponent<BasicEnemyStateManager>().TakeDamage(attackDamage);
+            }
+
+
+        }
         
         //set move direction
         if (PlayDeadAnimation == false || CanMove == true)
@@ -125,12 +148,14 @@ public class PlayerController : MonoBehaviour
         //flip the player if they are moving in the opposite direction
         if (horizontal > 0 && PlayDeadAnimation == false)
         {
-            spriteRenderer.flipX = false;
+            //flip the transform to face right
+            transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             isFacingRight = true;
         }
         if (horizontal < 0 && PlayDeadAnimation == false)
         {
-            spriteRenderer.flipX = true;
+            //flip the transform to face left
+            transform.localScale = new Vector3(-0.3f, 0.3f, 0.3f);
             isFacingRight = false;
         }
 
@@ -147,6 +172,7 @@ public class PlayerController : MonoBehaviour
     {
         if(!CanMove)
         {
+            rb.velocity = Vector2.zero;
             return;
         }
         //if the player is crouching
@@ -169,6 +195,10 @@ public class PlayerController : MonoBehaviour
     #region custom methods
     //custom methods are methods that you create yourself go here
 
+    public void EnableAttack()
+    {
+        CanAttack = true;
+    }
    public void Respawn()
     {
         //prevent player input
@@ -215,6 +245,11 @@ public class PlayerController : MonoBehaviour
             //draw the collider size
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(capsuleCollider.bounds.center, new Vector2(capsuleCollider.size.x, capsuleCollider.size.y));
+
+            //draw the attack range
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+            
         }
     }
     
