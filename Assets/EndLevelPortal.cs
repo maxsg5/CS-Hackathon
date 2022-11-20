@@ -11,7 +11,7 @@ public class EndLevelPortal : MonoBehaviour
     [SerializeField] USBCollected usbCollected;
     [SerializeField] Color color;
 
-    int unlockScore = 10;
+    [SerializeField] int unlockScore = 10;
     void Awake()
     {
         TextPrompt.SetActive(false);
