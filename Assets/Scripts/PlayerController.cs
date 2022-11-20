@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public bool isHoldingBox = false;
     public bool isFacingRight = true;
     public bool PlayDeadAnimation = false;
+    public bool CanMove = true;
     #endregion
 
     #region private variables
@@ -74,7 +75,7 @@ public class PlayerController : MonoBehaviour
         //check grounded by circlecast
         isGrounded = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y - (spriteHeight / 2)), 0.3f, LayerMask.GetMask("Ground"));
         //if the player can jump and is jumping
-        if (isGrounded && isJumping)
+        if (isGrounded && isJumping && CanMove) 
         {
             //make the player jump
             if (PlayDeadAnimation == false)
@@ -103,7 +104,7 @@ public class PlayerController : MonoBehaviour
         }
         
         //set move direction
-        if (PlayDeadAnimation == false)
+        if (PlayDeadAnimation == false || CanMove == true)
         {
             moveDirection = new Vector2(horizontal, 0).normalized;
         } else
@@ -112,7 +113,14 @@ public class PlayerController : MonoBehaviour
         }
 
         //change the animation state based on the player's movement
-        animator.SetFloat("Speed", Mathf.Abs(horizontal));
+        if(CanMove)
+        {
+            animator.SetFloat("Speed", Mathf.Abs(horizontal));
+        }
+        else
+        {
+            animator.SetFloat("Speed", 0);
+        }
 
         //flip the player if they are moving in the opposite direction
         if (horizontal > 0 && PlayDeadAnimation == false)
@@ -137,6 +145,10 @@ public class PlayerController : MonoBehaviour
     //FixedUpdate is called once per physics update
     void FixedUpdate()
     {
+        if(!CanMove)
+        {
+            return;
+        }
         //if the player is crouching
         if (isCrouching)
         {

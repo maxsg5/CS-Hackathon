@@ -21,6 +21,7 @@ public class StartCutscene2 : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            player.CanMove = false;
             cameraAnimator.SetBool("cutscene2", true);
             //audioSource.PlayOneShot(cutsceneAudio); //audio clip is 10.8 seconds long, start moving bridge at 4 seconds
             hint.SetActive(true);
@@ -38,6 +39,7 @@ public class StartCutscene2 : MonoBehaviour
         cameraAnimator.SetBool("cutscene2", false);
         hint.SetActive(false);
         UIusb.SetActive(true);
+        player.CanMove = true;
     }
 
    

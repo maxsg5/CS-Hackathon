@@ -21,6 +21,7 @@ public class StartCutscene : MonoBehaviour
         {
             //turn off player control
             GameManager.gameManager.RemoveHealth(GameManager.gameManager._playerHealth.Health);
+            player.CanMove = false;
             cameraAnimator.SetBool("cutscene1", true);
             audioSource.PlayOneShot(cutsceneAudio); //audio clip is 10.8 seconds long, start moving bridge at 4 seconds
             StartCoroutine(Cutscene1());
@@ -38,6 +39,7 @@ public class StartCutscene : MonoBehaviour
         yield return new WaitForSeconds(10.8f);
         cameraAnimator.SetBool("cutscene1", false);
         hint.SetActive(false);
+        player.CanMove = true;
     }
 
     IEnumerator MoveBridge()
