@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("Jump", false);
         }
         //check if the player is crouching
-        isCrouching = Input.GetButton("Crouch");
+        //isCrouching = Input.GetButton("Crouch");
 
         //check if the player is crouching
         if (isCrouching && PlayDeadAnimation == false)
