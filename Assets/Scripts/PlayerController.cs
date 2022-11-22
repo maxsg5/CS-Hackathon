@@ -221,7 +221,7 @@ public class PlayerController : MonoBehaviour
    public void Respawn()
     {
         //prevent player input
-        rb.isKinematic = true;
+        //rb.isKinematic = true;
         rb.velocity = Vector2.zero;
         //fade out the player
         dissolveController.isDissolving = true;

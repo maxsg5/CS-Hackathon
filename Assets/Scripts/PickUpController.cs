@@ -52,30 +52,31 @@ public class PickUpController : MonoBehaviour
         }
         else if(isHolding)
         {
-            //throw box in a parabolic arc in the direction the player is facing
-            if(Input.GetKeyDown(KeyCode.E))
-            {
-                isHolding = false;
-                rb.isKinematic = false;
-                boxCollider.isTrigger = false;
-                transform.SetParent(null);
-                //make box rotation match player rotation
-                transform.rotation = player.rotation;
-                //box carries momentum of player
-                rb.velocity = player.GetComponent<Rigidbody2D>().velocity;
-                //TODO: THIS IS BROKEN FOR SOME REASON IDK WHY... FEEL FREE TO FIX IT
-                // //throw box in a parabolic arc in the direction the player is facing
-                // if(player.GetComponent<PlayerController>().isFacingRight)
-                // {
-                //     rb.AddForce(new Vector2(throwSideForce, throwUpForce), ForceMode2D.Impulse);
-                // }
-                // else
-                // {
-                //     rb.AddForce(new Vector2(-throwSideForce, throwUpForce), ForceMode2D.Impulse);
-                // }
-                player.GetComponent<PlayerController>().isHoldingBox = false;
-                interactableBox.enabled = true;
-            }
+            //TODO: this is all bugged idk why
+            // //throw box in a parabolic arc in the direction the player is facing
+            // if(Input.GetKeyDown(KeyCode.E))
+            // {
+            //     isHolding = false;
+            //     rb.isKinematic = false;
+            //     boxCollider.isTrigger = false;
+            //     transform.SetParent(null);
+            //     //make box rotation match player rotation
+            //     transform.rotation = player.rotation;
+            //     //box carries momentum of player
+            //     rb.velocity = player.GetComponent<Rigidbody2D>().velocity;
+            //     //TODO: THIS IS BROKEN FOR SOME REASON IDK WHY... FEEL FREE TO FIX IT
+            //     // //throw box in a parabolic arc in the direction the player is facing
+            //     // if(player.GetComponent<PlayerController>().isFacingRight)
+            //     // {
+            //     //     rb.AddForce(new Vector2(throwSideForce, throwUpForce), ForceMode2D.Impulse);
+            //     // }
+            //     // else
+            //     // {
+            //     //     rb.AddForce(new Vector2(-throwSideForce, throwUpForce), ForceMode2D.Impulse);
+            //     // }
+            //     player.GetComponent<PlayerController>().isHoldingBox = false;
+            //     interactableBox.enabled = true;
+            // }
         }
     }
     
