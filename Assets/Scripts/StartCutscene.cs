@@ -20,7 +20,7 @@ public class StartCutscene : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             //turn off player control
-            GameManager.gameManager.RemoveHealth(GameManager.gameManager._playerHealth.Health);
+            //GameManager.gameManager.RemoveHealth(GameManager.gameManager._playerHealth.Health);
             player.CanMove = false;
             cameraAnimator.SetBool("cutscene1", true);
             audioSource.PlayOneShot(cutsceneAudio); //audio clip is 10.8 seconds long, start moving bridge at 4 seconds

@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     private float spriteHeight;
     private Vector3 spawnPoint;
     private bool isCollidiingEnemy;
+    private bool isInTunnel;
 
 
     //[serializefield] makes it visible in the inspector but the variable is still private
@@ -45,6 +46,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private bool isCrouching = false;
+    [SerializeField] private float groundCheckRadius = 0.3f;
+    [SerializeField] private float celingCheckRadius = 0.3f;
 
     #endregion
 
@@ -79,7 +82,7 @@ public class PlayerController : MonoBehaviour
         //check if the player is jumping
         isJumping = Input.GetButtonDown("Jump");
         //check grounded by circlecast
-        isGrounded = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y - (spriteHeight / 2)), 0.3f, LayerMask.GetMask("Ground"));
+        isGrounded = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y - (spriteHeight / 2)), groundCheckRadius, LayerMask.GetMask("Ground"));
         //if the player can jump and is jumping
         if (isGrounded && isJumping && CanMove) 
         {
@@ -105,8 +108,20 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            //set y scale to 1
-            transform.localScale = new Vector2(transform.localScale.x, 0.3f);
+            isInTunnel = Physics2D.OverlapCircle(new Vector2(transform.position.x, transform.position.y + (spriteHeight / 2)), celingCheckRadius, LayerMask.GetMask("Ground"));
+            //celling check
+            if (isInTunnel)
+            {
+                
+                //set y scale to 1
+                transform.localScale = new Vector2(transform.localScale.x, 0.3f/2f);
+            }
+            else
+            {
+                //set y scale to 1
+                transform.localScale = new Vector2(transform.localScale.x, 0.3f);
+            }
+            
         }
 
         //check if the player is attacking
@@ -161,6 +176,7 @@ public class PlayerController : MonoBehaviour
 
         if (GameManager.gameManager._playerHealth.Health <= 0 && PlayDeadAnimation == false)
         {
+            CanMove = false;
             PlayDeadAnimation = true;
             animator.SetTrigger("Dead");
             Respawn();
@@ -176,10 +192,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
         //if the player is crouching
-        if (isCrouching)
+        if (isCrouching || isInTunnel)
         {
+            //set y scale to 0.5
+            transform.localScale = new Vector2(transform.localScale.x, 0.3f/2f);
             //set the x component of the rigidbody's velocity to the move direction multiplied by the move speed
             rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+            
         }
         else
         {
@@ -222,6 +241,7 @@ public class PlayerController : MonoBehaviour
         dissolveController.isDissolving = false;
         rb.isKinematic = false;
         animator.SetTrigger("Respawn");
+        CanMove = true;
     }
 
     //No use for player health custom commands in the player controller since its controlled by the game manager
@@ -240,7 +260,12 @@ public class PlayerController : MonoBehaviour
         {
             //draw circle to show the grounded check
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(new Vector2(transform.position.x, transform.position.y - (spriteHeight / 2)), 0.3f);
+            Gizmos.DrawWireSphere(new Vector2(transform.position.x, transform.position.y - (spriteHeight / 2)), groundCheckRadius);
+
+            //draw circle to show the ceiling check
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(new Vector2(transform.position.x, transform.position.y + (spriteHeight / 2)), celingCheckRadius);
+
 
             //draw the collider size
             Gizmos.color = Color.yellow;

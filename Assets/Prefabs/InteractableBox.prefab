@@ -315,6 +315,7 @@ GameObject:
   - component: {fileID: 1403490681887792235}
   - component: {fileID: 1403490681887792234}
   - component: {fileID: 607357427149695651}
+  - component: {fileID: 5461932834298589089}
   m_Layer: 0
   m_Name: InteractableBox
   m_TagString: Box
@@ -477,3 +478,21 @@ MonoBehaviour:
   isDissolving: 0
   outColor: {r: 0, g: 0, b: 0, a: 0}
   inColor: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &5461932834298589089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403490681887792233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a678fd141ffc344d86f868d624310bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  objHolder: {fileID: 0}
+  pickUpRange: 2.5
+  throwUpForce: 10
+  throwSideForce: 2.5
+  isHolding: 0
