@@ -30,6 +30,7 @@ public class PickUpController : MonoBehaviour
         Vector3 distanceToPlayer = player.position - transform.position;
         if(!isHolding && distanceToPlayer.magnitude <= pickUpRange && interactableBox.circleSensor.isTriggered)
         {
+            if(isHolding) return;
             if(Input.GetKeyDown(KeyCode.E))
             {
                 isHolding = true;

@@ -43,6 +43,8 @@ namespace AI {
         private USBDrop usbDrop;
         private BoxCollider2D collider;
         private AudioSource audioSource;
+        [SerializeField] private AudioClip deathSound;
+        [SerializeField] private AudioClip hitSound;
         public bool IsCollidingPlayer = false; // This bool is equal to if the enemy is colliding the player
 
         private bool isAttacking = false; //This bool is equal to if the enemy is attacking
@@ -118,6 +120,7 @@ namespace AI {
         public void TakeDamage(float damage)
         {
             enemyHealth.RemoveHealth(damage);
+            audioSource.PlayOneShot(hitSound);
         }
 
         //This is take damage from the player. Should be synced with the punch and take into account attack rate
@@ -141,7 +144,10 @@ namespace AI {
             collider.size = new Vector2(0.9347277f, 0.6897885f);
             collider.offset = new Vector2(0.03151369f, 0.09204389f);
             anim.SetBool("IsDead", true);
-            yield return new WaitForSeconds(0.25f);
+            //cut volume in half
+            audioSource.volume = 0.2f;
+            audioSource.PlayOneShot(deathSound);
+            yield return new WaitForSeconds(3f);
             anim.SetBool("IsDead", false);
             Destroy(gameObject);
             usbDrop.Drop();

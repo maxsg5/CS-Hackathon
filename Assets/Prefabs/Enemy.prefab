@@ -265,6 +265,8 @@ MonoBehaviour:
   anim: {fileID: 7727028824317905047}
   sr: {fileID: 7727028824317905128}
   enemyHealth: {fileID: 6860402602748784692}
+  deathSound: {fileID: 8300000, guid: 6bcf7820086a5d442bc50796c589242a, type: 3}
+  hitSound: {fileID: 8300000, guid: e032a84d09d93df438d13d6e42c162b2, type: 3}
   IsCollidingPlayer: 0
 --- !u!114 &6860402602748784692
 MonoBehaviour:

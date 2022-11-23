@@ -10,6 +10,7 @@ public class StartCutscene : MonoBehaviour
     public Bridge bridge;
     public GameObject interactableBox;
     public GameObject hint;
+    public AudioSource levelMusic;
     AudioSource audioSource;
     void Awake()
     {
@@ -19,8 +20,8 @@ public class StartCutscene : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            //turn off player control
-            //GameManager.gameManager.RemoveHealth(GameManager.gameManager._playerHealth.Health);
+            //fade out level music
+            levelMusic.volume = 0.1f;
             player.CanMove = false;
             cameraAnimator.SetBool("cutscene1", true);
             audioSource.PlayOneShot(cutsceneAudio); //audio clip is 10.8 seconds long, start moving bridge at 4 seconds
@@ -40,6 +41,8 @@ public class StartCutscene : MonoBehaviour
         cameraAnimator.SetBool("cutscene1", false);
         hint.SetActive(false);
         player.CanMove = true;
+        //fade in level music
+        levelMusic.volume = 0.5f;
     }
 
     IEnumerator MoveBridge()

@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
 
 
     //[serializefield] makes it visible in the inspector but the variable is still private
+    [SerializeField] private AudioClip attackSound;
     [SerializeField] private float moveSpeed = 5f; 
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private bool isGrounded = false;
@@ -128,6 +129,7 @@ public class PlayerController : MonoBehaviour
         if(Input.GetMouseButtonDown(0) && CanAttack)
         {
             animator.SetTrigger("Attack");
+            audioSource.PlayOneShot(attackSound);
             
             // Detect enemies in range of attack
             Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);

@@ -152,10 +152,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   attackDamage: 2
+  attackSound: {fileID: 8300000, guid: be8079694aac19e48bbc7a70d71f17e1, type: 3}
   moveSpeed: 10
   jumpForce: 30
   isGrounded: 0
   isCrouching: 0
+  groundCheckRadius: 0.3
+  celingCheckRadius: 0.3
 --- !u!114 &8787371955409216191
 MonoBehaviour:
   m_ObjectHideFlags: 0
