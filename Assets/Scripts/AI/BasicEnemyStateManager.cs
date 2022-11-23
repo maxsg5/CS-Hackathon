@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using AI;
-namespace AI {
+namespace AI
+{
     public class BasicEnemyStateManager : MonoBehaviour
     {
         [Header("Current State")]
@@ -77,7 +78,7 @@ namespace AI {
             // This is only for the attack state to apply damage
             if (currentState == attackState)
             {
-                if(!isAttacking)
+                if (!isAttacking)
                 {
                     isAttacking = true;
                     StartCoroutine(Attack());
@@ -96,7 +97,7 @@ namespace AI {
             {
                 StartCoroutine(Dead());
             }
-            if(currentState == patrolState)
+            if (currentState == patrolState)
             {
                 if (!AddingHealth)
                 {
@@ -134,7 +135,7 @@ namespace AI {
             }
             anim.SetBool("IsAttack", true);
             anim.speed = attackRate;
-            yield return new WaitForSeconds(1.017f/ attackRate); //This is the length of the attack animation
+            yield return new WaitForSeconds(1.017f / attackRate); //This is the length of the attack animation
             isAttacking = false;
             anim.SetBool("IsAttack", false);
         }
@@ -145,7 +146,7 @@ namespace AI {
             collider.offset = new Vector2(0.03151369f, 0.09204389f);
             anim.SetBool("IsDead", true);
             //cut volume in half
-            audioSource.volume = 0.2f;
+            audioSource.volume = 0.5f;
             audioSource.PlayOneShot(deathSound);
             yield return new WaitForSeconds(3f);
             anim.SetBool("IsDead", false);
@@ -189,7 +190,7 @@ namespace AI {
                 IsCollidingPlayer = false;
             }
         }
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
     //draw the radius for the chase distance in green
     private void OnDrawGizmos()
     {
@@ -203,6 +204,7 @@ namespace AI {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+    
+    #endif
     }
-#endif
 }
