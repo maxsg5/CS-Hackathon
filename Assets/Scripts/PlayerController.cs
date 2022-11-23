@@ -214,6 +214,10 @@ public class PlayerController : MonoBehaviour
     #region custom methods
     //custom methods are methods that you create yourself go here
 
+    public void UpdateSpawnPoint()
+    {
+        spawnPoint = transform.position;
+    }
     public void EnableAttack()
     {
         CanAttack = true;

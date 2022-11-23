@@ -10,10 +10,14 @@ public class EndLevelPortal : MonoBehaviour
     [SerializeField] USBCollected usbCollected;
     [SerializeField] Color color;
 
+    [SerializeField] GameObject EndLevelUI;
     [SerializeField] int unlockScore = 10;
+    [SerializeField] PlayerController player;
+    private BoxCollider2D boxCollider2D;
     void Awake()
     {
         TextPrompt.text = (unlockScore - usbCollected.GetScore()).ToString();
+        boxCollider2D = GetComponent<BoxCollider2D>();
     
     }
 
@@ -30,6 +34,10 @@ public class EndLevelPortal : MonoBehaviour
             Material mat = GetComponent<Renderer>().material;
             mat.SetColor("_Color",color);
             mat.SetFloat("_scale", 0.5f);
+            //change collider to trigger
+            boxCollider2D.isTrigger = true;
+            
+
 
         }
         
@@ -44,8 +52,18 @@ public class EndLevelPortal : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            //TODO: end the game...
+            EndLevelUI.SetActive(true);
+            player.CanMove = false;
         }
+    }
+
+    public void QuitGame()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
    
 }
