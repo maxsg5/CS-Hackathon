@@ -1,7 +1,7 @@
 # CS-Hackathon
 This project is for submission to the MacEwan University Computer Science Club Hackathon 2022.
 
-Team CTRL-ALT-ELITE: Max Schafer, 
+Team CTRL-ALT-ELITE: Max Schafer, Mustafa Mohamed, Ethan Stevenson, Sami El-sayed 
 
 # Play the game here
 TODO: add game link
