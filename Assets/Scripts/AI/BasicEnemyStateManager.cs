@@ -146,9 +146,9 @@ namespace AI
             collider.offset = new Vector2(0.03151369f, 0.09204389f);
             anim.SetBool("IsDead", true);
             //cut volume in half
-            audioSource.volume = 0.5f;
+            audioSource.volume = 0.15f;
             audioSource.PlayOneShot(deathSound);
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(0.3f);
             anim.SetBool("IsDead", false);
             Destroy(gameObject);
             usbDrop.Drop();
@@ -156,7 +156,7 @@ namespace AI
 
         IEnumerator AddHealth()
         {
-            enemyHealth.AddHealth(10f);
+            enemyHealth.AddHealth(5f);
             yield return new WaitForSeconds(1f);
             AddingHealth = false;
         }
