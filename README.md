@@ -4,7 +4,7 @@ This project is for submission to the MacEwan University Computer Science Club H
 Team CTRL-ALT-ELITE: Max Schafer, Mustafa Mohamed, Ethan Stevenson, Sami El-sayed 
 
 # Play the game here
-TODO: add game link
+https://ndsio.itch.io/bug-escape 
 
 # For Developers:
 
