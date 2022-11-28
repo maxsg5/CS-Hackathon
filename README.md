@@ -3,12 +3,13 @@ This project is for submission to the MacEwan University Computer Science Club H
 
 Team CTRL-ALT-ELITE: Max Schafer, Mustafa Mohamed, Ethan Stevenson, Sami El-sayed 
 
-# Play the game here
+# Play the game here:
 https://ndsio.itch.io/bug-escape 
 
 # For Developers:
 
 ## Cloning the Repository
+*note: this game was made with unity version 2021.3.12f1*
 1.  First, navigate to the directory that you would like to clone the repository into using commands like:
     -   `cd`: to change your working directory.
     -   `cd ..`  to "go back" a level in your directory tree.
